@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerWin : MonoBehaviour
+public class PlayerWinLoose : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D rb;
@@ -24,6 +24,18 @@ public class PlayerWin : MonoBehaviour
         {
             Win();
         }
+        else if (other.gameObject.CompareTag("Dog"))
+        {
+            Loose();
+        }
+    }
+    private void Loose()
+    {
+        Debug.Log("Player lost!");
+        YouLostText.SetActive(true);
+        rb.bodyType = RigidbodyType2D.Static;
+        spriteRenderer.sprite = null;
+        StartCoroutine(RestartLevel(3f));
     }
     private void Win()
     {
@@ -31,11 +43,11 @@ public class PlayerWin : MonoBehaviour
         YouWonText.SetActive(true);
         rb.bodyType = RigidbodyType2D.Static;
         spriteRenderer.sprite = null;
-        StartCoroutine(RestartLevel());
+        StartCoroutine(RestartLevel(3f));
     }
-    IEnumerator RestartLevel()
+    IEnumerator RestartLevel(float time)
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(time);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
